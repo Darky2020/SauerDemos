@@ -1,0 +1,75 @@
+.menu nav {
+	padding: 10px 20px;
+}
+
+.nav-link, .navbar-brand {
+	color: white !important;
+}
+
+.nav-link:hover, .navbar-brand:hover {
+	color: #FF8000 !important;
+}
+
+.bg-dark {
+	background-color: #2c3140 !important;
+}
+
+.background-image {
+   width: 100%; 
+   background-image: url(https://sauertracker.net/images/6.jpg);
+   background-attachment: fixed;
+}
+
+.title-section {
+	background-color: #2c3140;
+	height: 30px;
+	width: 100%;
+}
+
+.title-section p {
+	color: white;
+	font-weight: 200;
+	padding: 0 20px;
+	line-height: 30px;
+    vertical-align: middle;
+}
+
+.transparent-bg {
+	background-color: rgba(44, 49, 64, 0.5);
+	width: 100%;
+	padding-top: 20px;
+}
+
+tr {
+	height: 48px;
+	vertical-align: middle;
+}
+
+a {
+	text-decoration: none;
+	color: #1061da;
+	font-weight: 500;
+}
+
+.footer {
+	background-color: #2c3140;
+	color: white;
+	padding: 10px;
+}
+
+.footer .footer-links {
+	font-weight: 600;
+}
+
+.footer .footer-text {
+	font-weight: 600;
+}
+
+.footer .footer-link a {
+	font-weight: 400;
+}
+
+.search-label {
+	color: white;
+	padding-left: 0;
+}

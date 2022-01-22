@@ -1,0 +1,103 @@
+{% extends "layout.html" %} {% block content %} <div class="background-image">
+  <div style="height: 20px;"></div>
+  <div class="title-section">
+    <p>Demo search</p>
+  </div>
+  <div class="transparent-bg">
+    <div class="container">
+      <div class="row">
+      	<div class="col-4">
+      		<label class="search-label" for="servaddr">Server address</label>
+			  <input onchange="resetgameid();" placeholder="IP:port" type="text" class="form-control" id="servaddr">
+      	</div>
+        <div class="col-4">
+          <label class="search-label" for="mapname">Map</label>
+			  <input onchange="resetgameid();" type="text" class="form-control" id="mapname">
+        </div>
+        <div class="col-4">
+      		<label class="search-label" for="gamemode">Mode</label>
+          <select onchange="resetgameid();" class="form-control" id="gamemode">
+          	<option value="None"></option>
+            <option value="coop_edit">coop_edit</option>
+            <option value="ffa">ffa</option>
+            <option value="instagib">instagib</option>
+            <option value="efficiency">efficiency</option>
+            <option value="tactics">tactics</option>
+            <option value="teamplay">teamplay</option>
+            <option value="insta_team">insta_team</option>
+            <option value="effic_team">effic_team</option>
+            <option value="tac_team">tac_team</option>
+            <option value="ctf">ctf</option>
+            <option value="insta_ctf">insta_ctf</option>
+            <option value="effic_ctf">effic_ctf</option>
+            <option value="hold">hold</option>
+            <option value="insta_hold">insta_hold</option>
+            <option value="effic_hold">effic_hold</option>
+            <option value="protect">protect</option>
+            <option value="insta_protect">insta_protect</option>
+            <option value="effic_protect">effic_protect</option>
+            <option value="capture">capture</option>
+            <option value="regen_capture">regen_capture</option>
+            <option value="collect">collect</option>
+            <option value="insta_collect">insta_collect</option>
+            <option value="effic_collect">effic_collect</option>
+          </select>
+      	</div>
+      </div>
+      <div class="row" style="margin-top: 20px;">
+      	<div class="col-4">
+          <label class="search-label" for="gametype">Type</label>
+			  <select onchange="resetgameid();" class="form-control" id="gametype">
+			<option value="None"></option>
+            <option value="duel">duel</option>
+            <option value="mix">mix</option>
+            <option value="clanwar">clanwar</option>
+            <option value="intern">intern</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <label class="search-label" for="beforetime">Before timestamp</label>
+			  <input onchange="resetgameid();" placeholder="Unix timestamp" type="text" class="form-control" id="beforetime">
+        </div>
+        <div class="col-4">
+          <label class="search-label" for="aftertime">After timestamp</label>
+			  <input onchange="resetgameid();" placeholder="Unix timestamp" type="text" class="form-control" id="aftertime">
+        </div>
+      </div>
+      <div class="row" style="margin-top: 20px;"><div class="col-12"><button type="button" class="btn btn-outline-light" onclick="SearchGames(true, true);">Search</button></div></div>
+    <div style="height: 20px;"></div>
+    <div class="row">
+          <div class="col-12" style="overflow-x: scroll;">
+            <table style="min-width: 600px;" class="table table-borderless table-striped table-dark">
+              <thead>
+                <tr>
+                  <th scope="col">Gameid</th>
+                  <th scope="col">Mode</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Map</th>
+                  <th scope="col">Server</th>
+                  <th scope="col">Host:Port</th>
+                  <th scope="col">Download</th>
+                  <th scope="col">Sauertracker</th>
+                  <th scope="col">Time</th>
+                </tr>
+              </thead>
+              <tbody id="info-table">
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1">
+            <div class="row"><div class="col-12"><button type="button" class="btn btn-outline-light" onclick="SearchGames(false, false);">Newer</button></div></div>
+          </div>
+          <div class="col-1">
+            <div class="row"><div class="col-12"><button type="button" class="btn btn-outline-light" onclick="SearchGames(true, false);">Older</button></div></div>
+          </div>
+        </div>
+        <div style="height: 20px;"></div>
+        </div>
+  </div>
+</div>
+<script type="text/javascript" src="{{ url_for('static', filename='script/search.js')}}"></script> {% endblock %}

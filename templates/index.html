@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="background-image">
+		<div style="height: 20px;"></div>
+		<div class="title-section">
+			<p>Latest demos</p>
+		</div>
+		<div class="transparent-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-12" style="overflow-x: scroll;">
+						<table style="min-width: 600px;" class="table table-borderless table-striped table-dark">
+							<thead>
+								<tr>
+									<th scope="col">Gameid</th>
+									<th scope="col">Mode</th>
+									<th scope="col">Type</th>
+									<th scope="col">Map</th>
+									<th scope="col">Server</th>
+									<th scope="col">Host:Port</th>
+									<th scope="col">Download</th>
+									<th scope="col">Sauertracker</th>
+									<th scope="col">Time</th>
+								</tr>
+							</thead>
+							<tbody id="info-table">
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						<button type="button" class="btn btn-dark" onclick="LoadGames();">Load more</button>
+					</div>
+				</div>
+			</div>
+		<div style="height: 20px;"></div>
+		</div>
+	</div>
+	<script type="text/javascript" src="{{ url_for('static', filename='script/index.js')}}"></script>
+{% endblock %}
