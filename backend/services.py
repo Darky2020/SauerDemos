@@ -88,6 +88,11 @@ class SauerAuthKeyService(object):
         except orm.core.ObjectNotFound:
             return 1
 
+    @classmethod
+    @orm.db_session
+    def list(cls):
+        return SauerAuthKey.select()
+
 class SauertrackerAPI(object):
     @classmethod
     def servers(cls, timeout=1):

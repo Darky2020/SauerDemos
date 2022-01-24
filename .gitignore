@@ -1,0 +1,14 @@
+*/**/__pycache__/*
+__pycache__/
+test.py
+config.py
+
+demos/
+backend/auth.h
+
+# misc
+.DS_STORE
+*.db
+
+# PyCharm
+.idea

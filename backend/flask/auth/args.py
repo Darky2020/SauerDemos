@@ -1,7 +1,7 @@
 from webargs import fields, validate
 
 authenticate = {
-    "password": fields.Str(required=True),
+    "password": fields.Str(required=False)
 }
 
 addauthkey = {
@@ -12,5 +12,5 @@ addauthkey = {
 }
 
 deleteauthkey = {
-	"id": fields.Int(required=True),
+	"id": fields.Int(required=True)
 }

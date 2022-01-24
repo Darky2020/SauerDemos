@@ -1,5 +1,12 @@
 from backend.services import AdminPasswordHashService
 from pony import orm
+import os
+
+if not os.path.exists('demos'):
+    os.makedirs('demos')
+
+if not os.path.exists('demos/temp'):
+    os.makedirs('demos/temp')
 
 def main():
     if AdminPasswordHashService.exists():
