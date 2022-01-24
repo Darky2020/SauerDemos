@@ -182,7 +182,7 @@ def cleanup():
                 game_info.delete()
 
 
-scheduler = BackgroundScheduler({'apscheduler.job_defaults.max_instances': 3}, daemon=True)
+scheduler = BackgroundScheduler({'apscheduler.job_defaults.max_instances': 3}, daemon=True, timezone="Europe/Berlin")
 job = scheduler.add_job(check_for_new_games, "interval", seconds=35)
 job = scheduler.add_job(get_gameinfo, "interval", seconds=35)
 job = scheduler.add_job(parse_demos, "interval", seconds=10)
