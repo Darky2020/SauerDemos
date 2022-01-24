@@ -77,82 +77,55 @@ class DemoParser(object):
 		if error:
 			print(f"error parsing demo: {error}")
 
-		i = 0
-		while i < stamp.Length:
-			packet = data[i]
+		data = io.BytesIO(data)
+
+		while data.tell() < data.getbuffer().nbytes:
+			packet = getint(data)
 
 			if packet == N_WELCOME:
-				i += 1
+				pass
 			elif packet == N_MAPCHANGE:
-				i += 1
-				string = []
-				while data[i] != 0:
-					string.append(data[i])
-					i += 1
-				i += 1
-				string = ''.join([chr(x) for x in string])
-				# print(f"map {string}")
-				self.map = string
-				# print(f"gamemode {data[i]}")
-				self.current_mode = data[i]
-				i += 1
-				# print(f"notgotitems {data[i]}")
-				i += 1
+				self.map = getstr(data)
+				self.current_mode = getint(data)
+				print(self.map, self.current_mode)
+				getint(data)
 
-			elif packet == N_SPAWNSTATE:
-				print("N_SPAWNSTATE") # sus
-				i += 2
 			elif packet == N_TIMEUP:
-				i += 2
+				getint(data)
 			elif packet == N_CLIENT:
-				i += 2
+				getint(data)
+				getint(data)
 			elif packet == N_CURRENTMASTER:
-				i += 1
-				while data[i] != 255:
-					i += 1
-				i += 1
+				while getint(data) != -1:
+					pass
 
 			elif packet == N_SPECTATOR:
-				i += 1
-				print(f"Spectator with cn {data[i]}")
-				i += 3
+				for _ in range(3):
+					getint(data)
 
 			elif packet == N_SETTEAM:
-				i += 2
-				while data[i] != 255:
-					i += 1
-				i += 1
+				while getint(data) != -1:
+					pass
+				getint(data)
 
 			elif packet == N_FORCEDEATH:
-				i += 3
+				for _ in range(2):
+					getint(data)
 
-				# i += 1
 			elif packet == N_TEAMINFO:
-				i += 2
+				getint(data)
 			elif packet == N_RESUME:
-				i += 1
-				while data[i] != 255:
-					i += 1
-				i += 1
+				while getint(data) != -1:
+					pass
 
 			elif packet == N_INITAI:
-				i += 1
-				cn = data[i]
-				i += 5
+				cn = getint(data)
 
-				string = []
-				while data[i] != 0:
-					string.append(data[i])
-					i += 1
-				i += 1
-				name = sauer2unicode(string)
+				for _ in range(4): # Random bot variables
+					getint(data)
 
-				string = []
-				while data[i] != 0:
-					string.append(data[i])
-					i += 1
-				i += 1
-				team = sauer2unicode(string)
+				name = (getstr(data))
+				team = (getstr(data))
 
 				self.players[cn] = {
 					"name": name,
@@ -161,24 +134,13 @@ class DemoParser(object):
 
 
 			elif packet == N_INITCLIENT:
-				i += 1
-				cn = data[i]
-				i += 1
+				cn = getint(data)
 
-				string = []
-				while data[i] != 0:
-					string.append(data[i])
-					i += 1
-				i += 1
-				name = sauer2unicode(string)
+				name = getstr(data)
 
-				string = []
-				while data[i] != 0:
-					string.append(data[i])
-					i += 1
-				i += 1
-				team = sauer2unicode(string)
-				i += 1
+				team = getstr(data)
+
+				getint(data)
 
 				self.players[cn] = {
 					"name": name,
@@ -186,49 +148,47 @@ class DemoParser(object):
 				}
 
 			elif packet == N_INITFLAGS:
-				i += 4
+				getint(data)
 
 			elif packet == N_BASESCORE:
-				i += 2
-				while data[i] != 0:
-					i += 1
-				i += 2
+				getint(data)
+				getstr(data)
+				getint(data)
 
 			elif packet == N_BASES:
-				i += 1
-				length = data[i]
-				i += length*4
-				i += 1
+				bases = getint(data)
+				for _ in range(bases*4):
+					getint(data)
 
 			elif packet == N_INITTOKENS:
-				i += 3
+				bases = getint(data)
+				for _ in range(bases*4):
+					getint(data)
 
 			elif packet == N_CDIS:
-				i += 2
+				getint(data)
 
 			elif packet == N_ITEMLIST:
-				i += 1
-				while data[i] != 255:
-					i += 1
-				i += 1
+				while getint(data) != -1:
+					pass
 
 			elif packet == N_PAUSEGAME:
-				i += 3
+				for _ in range(2):
+					getint(data)
 
 			elif packet == N_GAMESPEED:
-				i += 3
+				for _ in range(2):
+					getint(data)
 
 			elif packet == N_TEXT:
-				i += 1
-				string = []
-				while data[i] != 0:
-					string.append(data[i])
-					i += 1
-				i += 1
-				string = sauer2unicode(string)
+				getint(data)
+				getstr(data)
 
 			elif packet == 0:
-				i += 2
+				getint(data)
+			else:
+				# If we get to this point something definitely went wrong
+				getint(data)
 
 	def parseDemo(self, filename):
 		try:
