@@ -87,7 +87,6 @@ class DemoParser(object):
 			elif packet == N_MAPCHANGE:
 				self.map = getstr(data)
 				self.current_mode = getint(data)
-				print(self.map, self.current_mode)
 				getint(data)
 
 			elif packet == N_TIMEUP:
