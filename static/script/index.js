@@ -82,7 +82,7 @@ function AddToTable(info) {
 }
 
 function LoadGames() {
-    fetch("/api/demos/find?beforeid=" + (lastgameid.toString()))
+    fetch("/api/demos/find?limit=20&beforeid=" + (lastgameid.toString()))
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Request failed with status ${reponse.status}`)

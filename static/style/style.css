@@ -15,9 +15,12 @@
 }
 
 .background-image {
-   width: 100%; 
-   background-image: url(https://sauertracker.net/images/6.jpg);
-   background-attachment: fixed;
+	width: 100%; 
+	background-image: url(https://sauertracker.net/images/6.jpg);
+	background-attachment: fixed;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 .title-section {
@@ -47,8 +50,13 @@ tr {
 
 a {
 	text-decoration: none;
-	color: #1061da;
+	color: #10c7da;
 	font-weight: 500;
+}
+
+
+a:hover {
+	color: #0c8895;
 }
 
 .footer {
@@ -72,4 +80,12 @@ a {
 .search-label {
 	color: white;
 	padding-left: 0;
+}
+
+@media screen and (max-width: 650px) {
+	.search-label {
+		font-size: 10px;
+	}
+
+
 }
