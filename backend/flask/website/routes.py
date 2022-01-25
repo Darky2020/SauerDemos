@@ -9,3 +9,7 @@ def index():
 @blueprint.route("search", methods=["GET"])
 def search():
 	return render_template("search.html")
+
+@blueprint.route("api", methods=["GET"])
+def api():
+	return render_template("api.html")

@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="background-image">
+		<div style="height: 20px;"></div>
+		<div class="title-section">
+			<p>API Documentation</p>
+		</div>
+		<div class="transparent-bg">
+			<div class="container">
+				<h2>Demo find</h2>
+				<p>Returns a list of available demos that match certain criteria</p>
+				<p>Rate limit: 120 requests per minute and 600 requests per hour</p>
+				<div class="code-block">
+					<code>http://173.208.193.60:5000/api/demos/find<br>?limit=5<br>&mapname=reissen<br>&gametype=clanwar</code>
+				</div>
+				<br>
+				<p>Try this endpoint in your <a href="http://173.208.193.60:5000/api/demos/find?limit=5&mapname=reissen&gametype=clanwar">browser</a></p>
+				<h3>Query parameters</h3>
+				<table class="table table-bordered" style="background-color:rgba(0, 0, 0, 0); color: white;">
+					<thead>
+						<tr>
+							<th scope="col">Parameter</th>
+							<th scope="col">Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>host</td>
+							<td>String: host address of a server the game was set on</td>
+						</tr>
+						<tr>
+							<td>port</td>
+							<td>Int: port of a server the game was set on</td>
+						</tr>
+						<tr>
+							<td>mapname</td>
+							<td>String: name of the map the game was set on</td>
+						</tr>
+						<tr>
+							<td>gamemode</td>
+							<td>String: game mode of that game</td>
+						</tr>
+						<tr>
+							<td>gametype</td>
+							<td>String: game type of that game</td>
+						</tr>
+						<tr>
+							<td>beforetimestamp</td>
+							<td>Int: unix timestamp</td>
+						</tr>
+						<tr>
+							<td>aftertimestamp</td>
+							<td>Int: unix timestamp</td>
+						</tr>
+						<tr>
+							<td>beforeid</td>
+							<td>Int: Sauertracker's gameid</td>
+						</tr>
+						<tr>
+							<td>afterid</td>
+							<td>Int: Sauertracker's gameid</td>
+						</tr>
+						<tr>
+							<td>limit</td>
+							<td>Int: maximum number of results (1-1000)</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2>Demo download</h2>
+				<p>Returns a .dmo file of a given game by gameid</p>
+				<p>Rate limit: 30 requests per minute and 720 requests per hour</p>
+				<div class="code-block">
+					<code>http://173.208.193.60:5000/download/&lt;gameid&gt;.dmo</code>
+				</div>
+			</div>
+		<div style="height: 20px;"></div>
+		</div>
+	</div>
+{% endblock %}
