@@ -7,7 +7,7 @@ import string
 import random
 import io
 
-auth = ctypes.cdll.LoadLibrary('./backend/auth.so') # Need the right architecture | Compiled with go build -buildmode=c-shared -o auth.so auth.go
+auth = ctypes.cdll.LoadLibrary('./backend/auth.so') # Compiled with go build -buildmode=c-shared -o auth.so auth.go
 AnswerChallenge = auth.Solve
 AnswerChallenge.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
 AnswerChallenge.restype = ctypes.c_void_p

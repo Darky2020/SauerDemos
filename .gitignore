@@ -5,6 +5,7 @@ config.py
 
 demos/
 backend/auth.h
+backend/auth.so
 
 # misc
 .DS_STORE

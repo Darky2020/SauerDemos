@@ -1,3 +1,5 @@
+// Source: https://github.com/sauerbraten/discordauth/blob/master/pkg/auth/auth.go
+
 package main
 
 import (
