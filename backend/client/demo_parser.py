@@ -235,6 +235,15 @@ class DemoParser(object):
 					else:
 						self.frags[actor] += 1
 
+				elif packet == N_CLIENT:
+					cn = getint(data)
+					getint(data)
+
+					nested_packet = getint(data)
+
+					if nested_packet == N_SWITCHNAME:
+						name = getstr(data)
+						self.players[cn]["name"] = name
 
 				elif packet == N_INITCLIENT:
 					cn = getint(data)
@@ -246,6 +255,11 @@ class DemoParser(object):
 						"name": name,
 						"team": team
 					}
+
+				elif packet == N_SETTEAM:
+					cn = getint(data)
+					team = getstr(data)
+					self.players[cn]["team"] = team
 
 				elif packet == N_INITAI:
 					cn = getint(data)
