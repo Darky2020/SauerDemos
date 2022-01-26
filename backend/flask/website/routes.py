@@ -13,3 +13,7 @@ def search():
 @blueprint.route("api", methods=["GET"])
 def api():
 	return render_template("api.html")
+
+@blueprint.route("about", methods=["GET"])
+def about():
+	return render_template("about.html")

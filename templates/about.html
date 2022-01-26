@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="background-image">
+		<div style="height: 20px;"></div>
+		<div class="title-section">
+			<p>About</p>
+		</div>
+		<div class="transparent-bg">
+			<div class="container">
+				<h2>What is SauerDemos?</h2>
+				<p>SauerDemos is a project that collects demos of competitive games and archives them.</p>
+				<h2>How does it collect demos?</h2>
+				<p>At first it polls a list of new games from <a href="https://sauertracker.net/">SauerTracker</a>. Then it filters them out by game type and saves them in a database. After that it waits for those servers to open up and connects to them and gets all the demos available in the demo list. Finally it parses those demos and tries to match them with games on SauerTracker. After the demo has been matched with a game on SauerTracker it is added to the archive.</p>
+				<h2>What demos does it archive?</h2>
+				<p>It archives demos of duels, mixes, interns and clan wars.</p>
+				<h2>Why demos of some games are missing?</h2>
+				<p>Servers store a limited amount of demos (usually 5) so once the bot connects to collect the demos, some of them will no longer be available.</p>
+				<h2>Where can I see the source code?</h2>
+				<p>Source code of SauerDemos is available on <a href="https://github.com/Darky2020/SauerDemos">Github</a>.</p>
+				<h2>How can I help the project?</h2>
+				<p>If you are a server host, providing an auth key for your server would be appreciated since in that case the bot won't have to wait for the server to open up.</p>
+				<p>If you are just a regular player, making server open/veto every 2-3 games for a few seconds would be appreciated since the bot can connect and collect all the demos in that time.</p>
+			</div>
+		<div style="height: 20px;"></div>
+		</div>
+	</div>
+{% endblock %}
