@@ -12,9 +12,9 @@ blueprint = Blueprint("api", __name__, url_prefix="/api/")
 
 @blueprint.route("/demos/find", methods=["GET", "POST"])
 @use_args(demosfind_args, location="querystring")
-@limiter.limit("120/minute;600/hour")
+@limiter.limit("480/minute;2400/hour")
 @orm.db_session
-def join(args):
+def find(args):
     result = {"error": None, "data": {}}
 
     result["data"]["result"] = []

@@ -10,7 +10,7 @@ limiter = Limiter(app, key_func=get_remote_address)
 blueprint = Blueprint("download", __name__, url_prefix="/download/")
 
 @blueprint.route("<name>", methods=["GET"])
-@limiter.limit("30/minute;720/hour")
+@limiter.limit("240/minute;3600/hour")
 @orm.db_session
 def download(name):
 	return send_file(f"../../demos/{name}", attachment_filename=name)
