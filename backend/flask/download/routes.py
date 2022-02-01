@@ -16,10 +16,13 @@ blueprint = Blueprint("download", __name__, url_prefix="/download/")
 def download(name):
 	demo = FinalDemoService.get_by_gameid(int(name[:-4]))
 
-	datetime_string = datetime.utcfromtimestamp(demo.timestamp).isoformat().replace(":", "-").replace(" ", "_")
+	datetime_string = datetime.utcfromtimestamp(demo.timestamp).isoformat().replace(":", "-")
 	gamemode = demo.gamemode
 	gametype = demo.gametype
 	mapname = demo.mapname
 	servdesc = demo.serverdesc
 
-	return send_file(f"../../demos/{name}", attachment_filename=f"{datetime_string}_{gamemode}_{mapname}_{gametype}_{servdesc}.dmo")
+	demo_name = f"{datetime_string}_{gamemode}_{mapname}_{gametype}_{servdesc}.dmo"
+	demo_name = demo_name.replace(" ", "_")
+
+	return send_file(f"../../demos/{name}", attachment_filename=demo_name)
