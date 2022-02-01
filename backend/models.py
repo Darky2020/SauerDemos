@@ -24,6 +24,10 @@ class SauerAuthKey(db.Entity):
     name = orm.Required(str)
     key = orm.Required(str)
 
+class SauerPassword(db.Entity):
+    address = orm.Required(str)
+    password = orm.Required(str)
+
 class ServerPing(db.Entity):
     ignore = orm.Required(bool)
     host = orm.Required(str)

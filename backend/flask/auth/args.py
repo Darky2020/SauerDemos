@@ -14,3 +14,12 @@ addauthkey = {
 deleteauthkey = {
 	"id": fields.Int(required=True)
 }
+
+addpassword = {
+	"address": fields.Str(required=True),
+	"password": fields.Str(required=True)
+}
+
+deletepassword = {
+	"id": fields.Int(required=True)
+}

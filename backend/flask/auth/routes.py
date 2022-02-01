@@ -1,4 +1,4 @@
-from backend.services import AdminPasswordHashService, AuthTokenService, SauerAuthKeyService
+from backend.services import AdminPasswordHashService, AuthTokenService, SauerAuthKeyService, SauerPasswordService
 from flask import Blueprint, make_response, request
 from webargs.flaskparser import use_args
 from .decorators import token_required
@@ -78,3 +78,34 @@ def deleteauthkey(args):
 		return f"Key with id {args['id']} doesn't exist", 400
 
 	return "Key deleted", 200
+
+@blueprint.route("/password/add", methods=["POST"])
+@use_args(args.addpassword, location="json")
+@token_required
+def addpassword(args):
+	SauerPasswordService.create(args["address"], args["password"])
+
+	return "Password added", 200
+
+@blueprint.route("/password/list", methods=["GET"])
+@token_required
+@orm.db_session
+def listpassword():
+	data = []
+	passwords = SauerPasswordService.list()
+	for password in passwords:
+		data.append({
+				"id": password.id,
+				"address": password.address
+			})
+
+	return json.dumps(data), 200
+
+@blueprint.route("/password/delete", methods=["POST"])
+@use_args(args.deletepassword, location="json")
+@token_required
+def deletepassword(args):
+	if SauerPasswordService.delete_password(args["id"]):
+		return f"Password with id {args['id']} doesn't exist", 400
+
+	return "Password deleted", 200

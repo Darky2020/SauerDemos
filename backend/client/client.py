@@ -1,5 +1,5 @@
-from backend.services import ServerPingService, SauerAuthKeyService, DemolistCacheService
-from backend.utils import CanGetDemoFromServer, AnswerChallenge, getint, getstr, putint, randomstring
+from backend.utils import CanGetDemoFromServer, HashPassword, AnswerChallenge, getint, getstr, putint, randomstring
+from backend.services import ServerPingService, SauerAuthKeyService, SauerPasswordService, DemolistCacheService
 from ..sauerconsts import *
 from pony import orm
 import ctypes
@@ -25,6 +25,8 @@ class DemosClient(object):
 		self.queue = []
 		self.getting_demo = False
 		self.connected_at = 0
+		self.cn = 0
+		self.sessionid = 0
 
 	@orm.db_session
 	def ping_servers(self):
@@ -88,6 +90,8 @@ class DemosClient(object):
 		self.queue = []
 		self.getting_demo = False
 		self.connected_at = 0
+		self.cn = 0
+		self.sessionid = 0
 
 
 	def sendpacket(self, channel, packet, args):
@@ -121,11 +125,19 @@ class DemosClient(object):
 		if (authkey := SauerAuthKeyService.get_authkey(f"{ip} {port}")):
 			self.sendpacket(1, N_AUTHTRY, [authkey.desc, b"\x00", authkey.name])
 
+	def setmaster(self, ip, port):
+		if (password := SauerPasswordService.get_password(f"{ip} {port}")):
+			password_hash = HashPassword(self.cn, self.sessionid, password.password)
+			self.sendpacket(1, N_SETMASTER, [self.cn, putint(b'', self.sessionid), password_hash])
+
 	def parse_response(self, data):
 		packet_type = getint(data)
 
 		if packet_type == N_SERVINFO:
 			print("N_SERVINFO")
+			self.cn = getint(data)
+			getint(data) # prot
+			self.sessionid = getint(data)
 			self.sendpacket(1, N_CONNECT, [self.name, 0, "", "", ""])
 
 		if packet_type == N_WELCOME:
@@ -134,6 +146,7 @@ class DemosClient(object):
 			self.connecting = False
 			self.connected_at = int(time.time())
 			self.auth(self.current_ip, self.current_port)
+			self.setmaster(self.current_ip, self.current_port)
 			self.sendpacket(1, N_LISTDEMOS, [])
 
 		if packet_type == N_AUTHCHAL:
@@ -149,7 +162,7 @@ class DemosClient(object):
 			print("N_SERVMSG")
 			msg = getstr(data)
 			if not self.received_demo_list:
-				if "claimed auth" in msg or "claimed admin" in msg:
+				if "claimed auth" in msg or "claimed admin" in msg or "claimed master" in msg:
 					self.sendpacket(1, N_LISTDEMOS, [])
 
 		if packet_type == N_SENDDEMOLIST:

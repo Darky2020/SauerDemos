@@ -1,5 +1,5 @@
+from .models import SauerAuthKey, SauerPassword, AuthToken, AdminPasswordHash, UnprocessedDemoFileInfo
 from .models import ServerPing, SauertrackerGame, SauertrackerGameInfo, DemolistCache, FinalDemo
-from .models import SauerAuthKey, AuthToken, AdminPasswordHash, UnprocessedDemoFileInfo
 from uuid import uuid4
 from pony import orm
 import requests
@@ -92,6 +92,34 @@ class SauerAuthKeyService(object):
     @orm.db_session
     def list(cls):
         return SauerAuthKey.select()
+
+class SauerPasswordService(object):
+    @classmethod
+    @orm.db_session
+    def create(cls, address, password):
+        return SauerPassword(
+                address=address,
+                password=password
+            )
+
+    @classmethod
+    @orm.db_session
+    def get_password(cls, address):
+        return SauerPassword.select(address=address).first()
+
+    @classmethod
+    @orm.db_session
+    def delete_password(cls, id_):
+        try:
+            SauerPassword[id_].delete()
+            return 0
+        except orm.core.ObjectNotFound:
+            return 1
+
+    @classmethod
+    @orm.db_session
+    def list(cls):
+        return SauerPassword.select()
 
 class SauertrackerAPI(object):
     @classmethod

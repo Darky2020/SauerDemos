@@ -1,4 +1,5 @@
-from .services import SauerAuthKeyService
+from .services import SauerAuthKeyService, SauerPasswordService
+from .tiger import tiger_hash
 from .sauerconsts import *
 import ctypes
 import socket
@@ -11,6 +12,15 @@ auth = ctypes.cdll.LoadLibrary('./backend/auth.so') # Compiled with go build -bu
 AnswerChallenge = auth.Solve
 AnswerChallenge.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
 AnswerChallenge.restype = ctypes.c_void_p
+
+def HashPassword(cn, sessionid, password):
+	message = f"{cn} {sessionid} {password}"
+	res = tiger_hash(message)
+	password_hash = ""
+	for i in range(3):
+		password_hash += hex(res[i])[2:][::-1]
+
+	return password_hash
 
 def CanGetDemoFromServer(ip="", port=0):
 	UDP_IP = ip
@@ -50,7 +60,7 @@ def CanGetDemoFromServer(ip="", port=0):
 		return 1
 
 	if mastermode not in [MM_AUTH, MM_OPEN, MM_VETO]:
-		if not SauerAuthKeyService.get_authkey(f"{ip} {port}"):
+		if not SauerAuthKeyService.get_authkey(f"{ip} {port}") and not SauerPasswordService.get_password(f"{ip} {port}"):
 			return 1
 
 	return 0
