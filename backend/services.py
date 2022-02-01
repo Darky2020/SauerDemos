@@ -328,6 +328,11 @@ class FinalDemoService(object):
 
     @classmethod
     @orm.db_session
+    def get_by_gameid(cls, gameid):
+        return FinalDemo.select(gameid=gameid).first()
+
+    @classmethod
+    @orm.db_session
     def filter(cls, host=None, port=None, mapname=None, gamemode=None, gametype=None, beforetimestamp=None, aftertimestamp=None, beforeid=None, afterid=None, limit=10):
         if not beforeid and not afterid:
             beforeid = 99999999999
