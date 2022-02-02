@@ -49,7 +49,7 @@ def CanGetDemoFromServer(ip="", port=0):
 	numofargs = getint(data)
 	protocol = getint(data)
 	mode = getint(data)
-	timeleft = getint(data) # we don't really care about that
+	timeleft = getint(data)
 	maxclients = getint(data)
 	mastermode = getuint(data)
 
@@ -57,6 +57,10 @@ def CanGetDemoFromServer(ip="", port=0):
 		return 1
 
 	if players >= maxclients:
+		return 1
+
+	# Make sure we don't connect during an intermission
+	if timeleft <= 10:
 		return 1
 
 	if mastermode not in [MM_AUTH, MM_OPEN, MM_VETO]:
