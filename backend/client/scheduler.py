@@ -108,6 +108,9 @@ def match_demos():
             info = ast.literal_eval(SauertrackerGameInfoService.get_by_gameid(gameid=game.gameid).info)
             players = info["players"]
 
+            if len(players) <= 0:
+                continue
+
             exit = False
 
             for player in players:
