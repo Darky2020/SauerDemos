@@ -114,6 +114,9 @@ def match_demos():
             exit = False
 
             for player in players:
+                if player["state"] == 5:  # Don't care about spectators
+                    continue
+
                 if player["name"] not in demo_players:
                     exit = True
                     break
