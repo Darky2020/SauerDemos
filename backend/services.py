@@ -337,7 +337,7 @@ class FinalDemoService(object):
         if not beforeid and not afterid:
             beforeid = 99999999999
 
-        if beforeid:
+        if beforeid and not afterid:
             return FinalDemo.select(
                 lambda demo: (host == None or demo.host == host) and\
                 (port == None or demo.port == port) and\
@@ -348,7 +348,7 @@ class FinalDemoService(object):
                 (demo.timestamp > aftertimestamp) and\
                 (demo.gameid < beforeid)
             ).order_by(orm.desc(FinalDemo.gameid))[:limit]
-        else:
+        elif afterid and not beforeid:
             return FinalDemo.select(
                 lambda demo: (host == None or demo.host == host) and\
                 (port == None or demo.port == port) and\
@@ -359,6 +359,18 @@ class FinalDemoService(object):
                 (demo.timestamp > aftertimestamp) and\
                 (demo.gameid > afterid)
             ).order_by(FinalDemo.gameid.asc)[:limit]
+        else:
+            return FinalDemo.select(
+                lambda demo: (host == None or demo.host == host) and\
+                (port == None or demo.port == port) and\
+                (mapname == None or demo.mapname == mapname) and\
+                (gamemode == None or demo.gamemode == gamemode) and\
+                (gametype == None or demo.gametype == gametype) and\
+                (demo.timestamp < beforetimestamp) and\
+                (demo.timestamp > aftertimestamp) and\
+                (demo.gameid > afterid) and\
+                (demo.gameid < beforeid)
+            ).order_by(orm.desc(FinalDemo.gameid))[:limit]
 
 
 

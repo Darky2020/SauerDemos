@@ -110,6 +110,9 @@ function SearchGames(getNext, isSearch) {
 	var beforetime = document.getElementById('beforetime').value;
 	var aftertime = document.getElementById('aftertime').value;
 
+    var sauertracker_url = document.getElementById('sauertrackerurl').value;
+    var sauertracker_gameid = Number((sauertracker_url.split("/")).slice(-1)[0]);
+
 	if(servaddr)
 	{
 		url += "&host=" + servaddr.split(":")[0] + "&port=" + servaddr.split(":")[1]; 
@@ -141,14 +144,22 @@ function SearchGames(getNext, isSearch) {
 		url += "&aftertimestamp=" + aftertime;
 	}
 
-	if(getNext)
-	{
-		url += "&beforeid=" + lastgameid;
-	}
-	else
-	{
-		url += "&afterid=" + firstgameid;
-	}
+    if(sauertracker_url)
+    {
+        url += "&beforeid=" + (sauertracker_gameid+1);
+        url += "&afterid=" + (sauertracker_gameid-1);
+    }
+    else
+    {
+        if(getNext)
+        {
+            url += "&beforeid=" + lastgameid;
+        }
+        else
+        {
+            url += "&afterid=" + firstgameid;
+        }
+    }
 
 	fetch(url)
         .then(response => {
