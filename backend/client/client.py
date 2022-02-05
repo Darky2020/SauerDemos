@@ -1,4 +1,4 @@
-from backend.utils import CanGetDemoFromServer, HashPassword, AnswerChallenge, getint, getstr, putint, randomstring
+from backend.utils import CanGetDemoFromServer, HashPassword, AnswerChallenge, getint, getstr, putint, randomstring, getcurtime
 from backend.services import ServerPingService, SauerAuthKeyService, SauerPasswordService, DemolistCacheService
 from ..sauerconsts import *
 from pony import orm
@@ -51,7 +51,7 @@ class DemosClient(object):
 				continue
 
 			for game in server.games:
-				print(f"Connect game: {game}")
+				print(f"[{getcurtime()}] Connect game: {game}")
 
 			self.connect(server.host, server.port)
 			break
@@ -134,14 +134,14 @@ class DemosClient(object):
 		packet_type = getint(data)
 
 		if packet_type == N_SERVINFO:
-			print("N_SERVINFO")
+			print(f"[{getcurtime()}] N_SERVINFO")
 			self.cn = getint(data)
 			getint(data) # prot
 			self.sessionid = getint(data)
 			self.sendpacket(1, N_CONNECT, [self.name, 0, "", "", ""])
 
 		if packet_type == N_WELCOME:
-			print("N_WELCOME")
+			print(f"[{getcurtime()}] N_WELCOME")
 			self.connected = True
 			self.connecting = False
 			self.connected_at = int(time.time())
@@ -150,7 +150,7 @@ class DemosClient(object):
 			self.sendpacket(1, N_LISTDEMOS, [])
 
 		if packet_type == N_AUTHCHAL:
-			print("N_AUTHCHAL")
+			print(f"[{getcurtime()}] N_AUTHCHAL")
 			desc = getstr(data)
 			id_ = getint(data)
 			challenge = getstr(data)			
@@ -159,14 +159,14 @@ class DemosClient(object):
 			self.sendpacket(1, N_AUTHANS, [desc, b"\x00", putint(b'', id_), answer, b"\x00"])
 
 		if packet_type == N_SERVMSG:
-			print("N_SERVMSG")
 			msg = getstr(data)
+			print(f"[{getcurtime()}] N_SERVMSG: {msg}")
 			if not self.received_demo_list:
 				if "claimed auth" in msg or "claimed admin" in msg or "claimed master" in msg:
 					self.sendpacket(1, N_LISTDEMOS, [])
 
 		if packet_type == N_SENDDEMOLIST:
-			print("N_SENDDEMOLIST")
+			print(f"[{getcurtime()}] N_SENDDEMOLIST")
 			self.received_demo_list = True
 			num = getint(data)
 			for i in range(num):
@@ -190,16 +190,16 @@ class DemosClient(object):
 
 				DemolistCacheService.create(text)
 
-			print(f"Queue: {self.queue}")
+			print(f"[{getcurtime()}] Queue: {self.queue}")
 
 		if packet_type == N_SENDDEMO:
-			print("N_SENDDEMO")
+			print(f"[{getcurtime()}] N_SENDDEMO")
 			getint(data)
 
 			curpath = os.path.abspath(os.curdir)
 			hash_name = randomstring()
 			path = f"demos/temp/{hash_name}.dmo"
-			print(f"Received demo {path}")
+			print(f"[{getcurtime()}] Received demo {path}")
 			f = open(path, "wb")
 			demo = data.read()
 			f.write(demo)
@@ -208,7 +208,7 @@ class DemosClient(object):
 			self.getting_demo = False
 
 		if packet_type == N_MAPCHANGE:
-			print("N_MAPCHANGE")
+			print(f"[{getcurtime()}] N_MAPCHANGE")
 			# Hopefully this works
 			for i, _ in enumerate(self.queue):
 				self.queue[i] -= 1
@@ -235,10 +235,10 @@ class DemosClient(object):
 	def poll_events(self):
 		event = self.host.service(0)
 		if event.type == enet.EVENT_TYPE_CONNECT:
-			print(f"Connected to {event.peer.address}")
+			print(f"[{getcurtime()}] Connected to {event.peer.address}")
 
 		elif event.type == enet.EVENT_TYPE_DISCONNECT:
-			print(f"Disconnected from {event.peer.address}")
+			print(f"[{getcurtime()}] Disconnected from {event.peer.address}")
 			self.disconnect_reset()
 
 		elif event.type == enet.EVENT_TYPE_RECEIVE:
@@ -264,7 +264,7 @@ class DemosClient(object):
 			self.poll_demos()
 			self.check_disconnects()
 		except Exception as e:
-			print(f"Ran into an exception {e}")
+			print(f"[{getcurtime()}] Ran into an exception {e}")
 			self.disconnect()
 
 

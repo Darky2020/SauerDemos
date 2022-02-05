@@ -1,5 +1,6 @@
 from .services import SauerAuthKeyService, SauerPasswordService
 from .tiger import tiger_hash
+from datetime import datetime
 from .sauerconsts import *
 import ctypes
 import socket
@@ -143,3 +144,8 @@ def char_to_uchar(n):
 def randomstring():
 	return ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=10))
 
+def getcurtime():
+	now = datetime.now()
+	current_time = now.strftime("%H:%M:%S")
+
+	return current_time

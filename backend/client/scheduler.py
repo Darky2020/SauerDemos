@@ -1,6 +1,7 @@
 from backend.services import SauertrackerAPI, SauertrackerGameService, SauertrackerGameInfoService, UnprocessedDemoFileInfoService, FinalDemoService
 from apscheduler.schedulers.background import BackgroundScheduler
 from backend.client.demo_parser import DemoParser
+from backend.utils import getcurtime
 from backend.sauerconsts import *
 from pony import orm
 import shutil
@@ -23,7 +24,7 @@ def check_for_new_games():
         if SauertrackerGameService.already_added(game["id"]):
             continue
 
-        print(f"Added game {game['id']} to the database")
+        print(f"[{getcurtime()}] Added game {game['id']} to the database")
 
         SauertrackerGameService.create(
             gameid = game["id"],
@@ -56,7 +57,7 @@ def get_gameinfo():
             return
 
 
-        print(f"Got game info of game {uncached.gameid}")
+        print(f"[{getcurtime()}] Got game info of game {uncached.gameid}")
 
         SauertrackerGameInfoService.create(
             gameid=uncached.gameid,
@@ -78,7 +79,7 @@ def parse_demos():
         demo_mapname, demo_gamemode, demo_players, error = parser.parseDemo(filename=demo)
 
         if error:
-            print(f"Encountered error: {error} while parsing demo {demo}")
+            print(f"[{getcurtime()}] Encountered error: {error} while parsing demo {demo}")
             continue
 
         UnprocessedDemoFileInfoService.create(
@@ -88,7 +89,7 @@ def parse_demos():
             players=str(demo_players)
         )
 
-        print(f"Parsed demo {demo}")
+        print(f"[{getcurtime()}] Parsed demo {demo}")
         break
 
 @orm.db_session
@@ -136,7 +137,7 @@ def match_demos():
             if exit:
                 continue
 
-            print(f"Matched game {game.gameid} with demo {demo_info.path}")
+            print(f"[{getcurtime()}] Matched game {game.gameid} with demo {demo_info.path}")
 
             shutil.move(demo_info.path, f"demos/{game.gameid}.dmo")
 
@@ -165,7 +166,7 @@ def cleanup():
             delta = (int(time.time())-os.path.getctime(demo))/3600
             # 36 hours
             if delta > 36:
-                print(f"Cleanup: deleted {demo}")
+                print(f"[{getcurtime()}] Cleanup: deleted {demo}")
                 os.remove(demo)
                 file_info = UnprocessedDemoFileInfoService.get_by_path(path=demo)
                 if file_info:
@@ -180,7 +181,7 @@ def cleanup():
         # 36 hours
         if delta > 36:
             gameid = game.gameid
-            print(f"Cleanup: deleted game {gameid} from db")
+            print(f"[{getcurtime()}] Cleanup: deleted game {gameid} from db")
             game.delete()
 
             game_info = SauertrackerGameInfoService.get_by_gameid(gameid=gameid)
