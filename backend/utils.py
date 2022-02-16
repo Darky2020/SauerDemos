@@ -61,7 +61,7 @@ def CanGetDemoFromServer(ip="", port=0):
 		return 1
 
 	# Make sure we don't connect during an intermission
-	if timeleft <= 10:
+	if timeleft <= 10 and mode != 1:
 		return 1
 
 	if mastermode not in [MM_AUTH, MM_OPEN, MM_VETO]:
