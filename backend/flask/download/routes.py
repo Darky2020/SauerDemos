@@ -16,6 +16,9 @@ blueprint = Blueprint("download", __name__, url_prefix="/download/")
 def download(name):
 	demo = FinalDemoService.get_by_gameid(int(name[:-4]))
 
+	if not demo:
+		return "Demo not found", 404
+
 	datetime_string = datetime.utcfromtimestamp(demo.timestamp).isoformat().replace(":", "-")
 	gamemode = demo.gamemode
 	gametype = demo.gametype
