@@ -19,7 +19,7 @@ def HashPassword(cn, sessionid, password):
 	res = tiger_hash(message)
 	password_hash = ""
 	for i in range(3):
-		password_hash += hex(res[i])[2:][::-1]
+		password_hash += ("%016x"%res[i])[::-1]
 
 	return password_hash
 
