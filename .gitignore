@@ -3,6 +3,7 @@ __pycache__/
 test.py
 config.py
 
+menv/
 demos/
 backend/auth.h
 backend/auth.so
