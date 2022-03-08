@@ -220,20 +220,21 @@ class DemoParser(object):
 				packet = getint(data)
 
 				if packet == N_DIED:
-					target = getint(data)
-					actor = getint(data)
+					if not self.intermission:
+						target = getint(data)
+						actor = getint(data)
 
-					if target not in self.deaths:
-						self.deaths[target] = 0
-					self.deaths[target] += 1
+						if target not in self.deaths:
+							self.deaths[target] = 0
+						self.deaths[target] += 1
 
-					if actor not in self.frags:
-						self.frags[actor] = 0
+						if actor not in self.frags:
+							self.frags[actor] = 0
 
-					if target == actor or (self.players[target]["team"] == self.players[actor]["team"] and self.current_mode in teammodes):
-						self.frags[actor] -= 1
-					else:
-						self.frags[actor] += 1
+						if target == actor or (self.players[target]["team"] == self.players[actor]["team"] and self.current_mode in teammodes):
+							self.frags[actor] -= 1
+						else:
+							self.frags[actor] += 1
 
 				elif packet == N_CLIENT:
 					cn = getint(data)
