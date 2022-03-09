@@ -282,7 +282,9 @@ class DemoParser(object):
 						self.players.pop(cn)
 
 				elif packet == N_TIMEUP:
-					self.intermission = True
+					seconds = getint(data)
+					if seconds == 0:
+						self.intermission = True
 
 				stamp, data, error = self.readPacket(stream)
 
