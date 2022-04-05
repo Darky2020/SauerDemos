@@ -64,6 +64,9 @@ def CanGetDemoFromServer(ip="", port=0):
 	if timeleft <= 10 and mode != 1:
 		return 1
 
+	if mastermode == MM_PRIVATE:
+		return 1
+
 	if mastermode not in [MM_AUTH, MM_OPEN, MM_VETO]:
 		if not SauerAuthKeyService.get_authkey(f"{ip} {port}") and not SauerPasswordService.get_password(f"{ip} {port}"):
 			return 1
