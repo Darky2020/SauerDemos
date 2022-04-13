@@ -106,7 +106,9 @@ def match_demos():
         demo_infos = UnprocessedDemoFileInfoService.get_by_mm(mode=game.gamemode, mapname=game.mapname)
         for demo_info in demo_infos:
             demo_players = ast.literal_eval(demo_info.players)
-            info = ast.literal_eval(SauertrackerGameInfoService.get_by_gameid(gameid=game.gameid).info)
+            if not (gameinfo := SauertrackerGameInfoService.get_by_gameid(gameid=game.gameid)):
+                continue
+            info = ast.literal_eval(.info)
             players = info["players"]
 
             if len(players) <= 0:
