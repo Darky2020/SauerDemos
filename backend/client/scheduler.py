@@ -112,7 +112,7 @@ def match_demos():
             players = info["players"]
 
             if len(players) <= 0:
-                return
+                continue
 
             for player in players:
                 if player["state"] == 5:  # Don't care about spectators
