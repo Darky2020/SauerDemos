@@ -112,32 +112,21 @@ def match_demos():
             players = info["players"]
 
             if len(players) <= 0:
-                continue
-
-            exit = False
+                return
 
             for player in players:
                 if player["state"] == 5:  # Don't care about spectators
                     continue
 
-                if player["name"] not in demo_players:
-                    exit = True
-                    break
+                tmp_player = {
+                    "name": player["name"],
+                    "team": player["team"],
+                    "frags": player["frags"],
+                    "deaths": player["deaths"]
+                }
 
-                if player["team"] != demo_players[player["name"]]["team"]:
-                    exit = True
-                    break
-
-                if player["frags"] != demo_players[player["name"]]["frags"]:
-                    exit = True
-                    break
-
-                if player["deaths"] != demo_players[player["name"]]["deaths"]:
-                    exit = True
-                    break
-
-            if exit:
-                continue
+                if tmp_player not in demo_players:
+                    continue
 
             print(f"[{getcurtime()}] Matched game {game.gameid} with demo {demo_info.path}")
 

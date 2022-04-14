@@ -257,6 +257,16 @@ class DemoParser(object):
 						"team": team
 					}
 
+				elif packet == N_RESUME:
+					cn = getint(data)
+					state = getint(data)
+					frags = getint(data)
+					flags = getint(data)
+					deaths = getint(data)
+
+					self.frags[cn] = frags
+					self.deaths[cn] = deaths
+
 				elif packet == N_SETTEAM:
 					cn = getint(data)
 					team = getstr(data)
@@ -288,7 +298,7 @@ class DemoParser(object):
 
 				stamp, data, error = self.readPacket(stream)
 
-			result = {}
+			result = []
 
 			for player in self.players:
 				frags = 0
@@ -300,14 +310,13 @@ class DemoParser(object):
 				if player in self.deaths:
 					deaths = self.deaths[player]
 
-				result[self.players[player]["name"]] = {
+				result.append({
+						"name": self.players[player]["name"],
 						"team": self.players[player]["team"],
 						"frags": frags,
-						"deaths": deaths,
-					}
+						"deaths": deaths
+					})
 
 			return self.map, self.current_mode, result, None
 		except Exception as e:
 			return None, None, None, e
-
-			
