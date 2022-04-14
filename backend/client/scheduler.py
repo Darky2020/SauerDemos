@@ -105,7 +105,8 @@ def match_demos():
 
         demo_infos = UnprocessedDemoFileInfoService.get_by_mm(mode=game.gamemode, mapname=game.mapname)
         for demo_info in demo_infos:
-            demo_players = ast.literal_eval(demo_info.players)
+            demo_players = demo_info.players
+            
             if not (gameinfo := SauertrackerGameInfoService.get_by_gameid(gameid=game.gameid)):
                 continue
             info = ast.literal_eval(gameinfo.info)
@@ -125,7 +126,7 @@ def match_demos():
                     "deaths": player["deaths"]
                 }
 
-                if frozenset(tmp_player.items()) not in demo_players:
+                if str(frozenset(tmp_player.items())) not in demo_players:
                     continue
 
             print(f"[{getcurtime()}] Matched game {game.gameid} with demo {demo_info.path}")
