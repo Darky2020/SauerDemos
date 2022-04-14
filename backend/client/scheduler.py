@@ -125,24 +125,27 @@ def match_demos():
                     "deaths": player["deaths"]
                 }
 
-                if tmp_player not in demo_players:
+                if frozenset(tmp_player.items()) not in demo_players:
                     continue
 
             print(f"[{getcurtime()}] Matched game {game.gameid} with demo {demo_info.path}")
 
-            shutil.move(demo_info.path, f"demos/{game.gameid}.dmo")
+            if not os.path.exists(demo_info.path):
+                print(f"Demo {demo_info.path} doesn't exist")
+            else:
+                shutil.move(demo_info.path, f"demos/{game.gameid}.dmo")
 
-            FinalDemoService.create(
-                gameid=game.gameid,
-                timestamp=game.timestamp,
-                mapname=game.mapname,
-                gamemode=game.gamemode,
-                gametype=game.gametype,
-                host=game.host,
-                port=game.port,
-                demo_path=f"demos/{game.gameid}.dmo",
-                serverdesc=info["description"]
-            )
+                FinalDemoService.create(
+                    gameid=game.gameid,
+                    timestamp=game.timestamp,
+                    mapname=game.mapname,
+                    gamemode=game.gamemode,
+                    gametype=game.gametype,
+                    host=game.host,
+                    port=game.port,
+                    demo_path=f"demos/{game.gameid}.dmo",
+                    serverdesc=info["description"]
+                )
 
             game.processed = True
             demo_info.delete()

@@ -310,12 +310,14 @@ class DemoParser(object):
 				if player in self.deaths:
 					deaths = self.deaths[player]
 
-				result.append({
-						"name": self.players[player]["name"],
-						"team": self.players[player]["team"],
-						"frags": frags,
-						"deaths": deaths
-					})
+				tmp_player = {
+					"name": self.players[player]["name"],
+					"team": self.players[player]["team"],
+					"frags": frags,
+					"deaths": deaths
+				}
+
+				result.append(frozenset(tmp_player.items()))
 
 			return self.map, self.current_mode, result, None
 		except Exception as e:
