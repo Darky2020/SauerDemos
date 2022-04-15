@@ -1,4 +1,4 @@
-from backend.services import AdminPasswordHashService, AuthTokenService, SauerAuthKeyService, SauerPasswordService
+from backend.services import AdminPasswordHashService, AuthTokenService, SauerAuthKeyService, SauerPasswordService, FinalDemoService
 from flask import Blueprint, make_response, request
 from webargs.flaskparser import use_args
 from .decorators import token_required
@@ -109,3 +109,12 @@ def deletepassword(args):
 		return f"Password with id {args['id']} doesn't exist", 400
 
 	return "Password deleted", 200
+
+@blueprint.route("/demo/remove", methods=["POST"])
+@use_args(args.removedemo, location="json")
+@token_required
+def removedemo(args):
+	if not FinalDemoService.remove_by_gameid(args["gameid"]):
+		return f"Couldn't remove demo {args['gameid']}", 400
+
+	return "Removed demo", 200

@@ -333,6 +333,15 @@ class FinalDemoService(object):
 
     @classmethod
     @orm.db_session
+    def remove_by_gameid(cls, gameid):
+        if (demo := FinalDemo.select(gameid=gameid).first()):
+            demo.delete()
+            return True
+        else:
+            return False
+
+    @classmethod
+    @orm.db_session
     def filter(cls, host=None, port=None, mapname=None, gamemode=None, gametype=None, beforetimestamp=None, aftertimestamp=None, beforeid=None, afterid=None, limit=10):
         if not beforeid and not afterid:
             beforeid = 99999999999

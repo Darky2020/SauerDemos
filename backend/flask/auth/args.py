@@ -23,3 +23,7 @@ addpassword = {
 deletepassword = {
 	"id": fields.Int(required=True)
 }
+
+removedemo = {
+	"gameid": fields.Int(required=True)
+}
