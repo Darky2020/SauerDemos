@@ -317,7 +317,7 @@ class DemoParser(object):
 					"deaths": deaths
 				}
 
-				result.append(frozenset(tmp_player.items()))
+				result.append(str(tmp_player))
 
 			return self.map, self.current_mode, result, None
 		except Exception as e:

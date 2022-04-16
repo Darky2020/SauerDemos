@@ -115,6 +115,8 @@ def match_demos():
             if len(players) <= 0:
                 continue
 
+            exit = False
+
             for player in players:
                 if player["state"] == 5:  # Don't care about spectators
                     continue
@@ -126,8 +128,12 @@ def match_demos():
                     "deaths": player["deaths"]
                 }
 
-                if str(frozenset(tmp_player.items())) not in demo_players:
-                    continue
+                if str(tmp_player) not in demo_players:
+                    exit = True
+                    break
+
+            if exit:
+                continue
 
             print(f"[{getcurtime()}] Matched game {game.gameid} with demo {demo_info.path}")
 
