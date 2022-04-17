@@ -189,6 +189,119 @@ class DemoParser(object):
 				# If we get to this point something definitely went wrong
 				getint(data)
 
+	def parseMessages(self, packet, data):
+		if packet == N_DIED:
+			if not self.intermission:
+				target = getint(data)
+				actor = getint(data)
+
+				if target not in self.deaths:
+					self.deaths[target] = 0
+				self.deaths[target] += 1
+
+				if actor not in self.frags:
+					self.frags[actor] = 0
+
+				if target == actor or (self.players[target]["team"] == self.players[actor]["team"] and self.current_mode in teammodes):
+					self.frags[actor] -= 1
+				else:
+					self.frags[actor] += 1
+
+		elif packet == N_CLIENT:
+			cn = getint(data)
+
+			length = getint(data)
+
+			nested_data = io.BytesIO(data.read(length))
+
+			while nested_data:
+				nested_packet = getint(nested_data)
+
+				if nested_packet == N_CLIENTPING:
+					getint(nested_data)
+				elif nested_packet == N_GUNSELECT:
+					getint(nested_data)
+				elif nested_packet == N_SPAWN:
+					getint(nested_data)
+					getint(nested_data)
+					getint(nested_data)
+					getint(nested_data)
+					getint(nested_data)
+					getint(nested_data)
+					for _ in range(5):
+						getint(nested_data)
+
+				elif nested_packet == N_SOUND:
+					getint(nested_data)
+				elif nested_packet == N_TEXT:
+					getstr(nested_data)
+				elif nested_packet == N_SWITCHMODEL:
+					getint(nested_data)
+				elif nested_packet == N_TAUNT:
+					pass
+				elif nested_packet == 0:
+					p = getint(data) # Apparently sauer sometimes bundles multiple N_CLIENT packets together
+					if p != 0:
+						self.parseMessages(p, data)
+					break
+
+				elif nested_packet == N_SWITCHNAME:
+					self.players[cn]["name"] = getstr(nested_data)
+				elif nested_packet == N_SWITCHTEAM:
+					self.players[cn]["team"] = getstr(nested_data)
+				else:
+					break
+
+		elif packet == N_INITCLIENT:
+			cn = getint(data)
+
+			name = getstr(data)
+			team = getstr(data)
+
+			self.players[cn] = {
+				"name": name,
+				"team": team
+			}
+
+		elif packet == N_RESUME:
+			cn = getint(data)
+			state = getint(data)
+			frags = getint(data)
+			flags = getint(data)
+			deaths = getint(data)
+
+			self.frags[cn] = frags
+			self.deaths[cn] = deaths
+
+		elif packet == N_SETTEAM:
+			cn = getint(data)
+			team = getstr(data)
+			self.players[cn]["team"] = team
+
+		elif packet == N_INITAI:
+			cn = getint(data)
+
+			for _ in range(4): # Random bot variables
+				getint(data)
+
+			name = (getstr(data))
+			team = (getstr(data))
+
+			self.players[cn] = {
+				"name": name,
+				"team": team
+			}
+
+		elif packet == N_CDIS:
+			cn = getint(data)
+			if not self.intermission:
+				self.players.pop(cn)
+
+		elif packet == N_TIMEUP:
+			seconds = getint(data)
+			if seconds == 0:
+				self.intermission = True
+
 	def parseDemo(self, filename):
 		try:
 			self.map = ""
@@ -219,82 +332,7 @@ class DemoParser(object):
 
 				packet = getint(data)
 
-				if packet == N_DIED:
-					if not self.intermission:
-						target = getint(data)
-						actor = getint(data)
-
-						if target not in self.deaths:
-							self.deaths[target] = 0
-						self.deaths[target] += 1
-
-						if actor not in self.frags:
-							self.frags[actor] = 0
-
-						if target == actor or (self.players[target]["team"] == self.players[actor]["team"] and self.current_mode in teammodes):
-							self.frags[actor] -= 1
-						else:
-							self.frags[actor] += 1
-
-				elif packet == N_CLIENT:
-					cn = getint(data)
-					getint(data)
-
-					nested_packet = getint(data)
-
-					if nested_packet == N_SWITCHNAME:
-						name = getstr(data)
-						self.players[cn]["name"] = name
-
-				elif packet == N_INITCLIENT:
-					cn = getint(data)
-
-					name = getstr(data)
-					team = getstr(data)
-
-					self.players[cn] = {
-						"name": name,
-						"team": team
-					}
-
-				elif packet == N_RESUME:
-					cn = getint(data)
-					state = getint(data)
-					frags = getint(data)
-					flags = getint(data)
-					deaths = getint(data)
-
-					self.frags[cn] = frags
-					self.deaths[cn] = deaths
-
-				elif packet == N_SETTEAM:
-					cn = getint(data)
-					team = getstr(data)
-					self.players[cn]["team"] = team
-
-				elif packet == N_INITAI:
-					cn = getint(data)
-
-					for _ in range(4): # Random bot variables
-						getint(data)
-
-					name = (getstr(data))
-					team = (getstr(data))
-
-					self.players[cn] = {
-						"name": name,
-						"team": team
-					}
-
-				elif packet == N_CDIS:
-					cn = getint(data)
-					if not self.intermission:
-						self.players.pop(cn)
-
-				elif packet == N_TIMEUP:
-					seconds = getint(data)
-					if seconds == 0:
-						self.intermission = True
+				self.parseMessages(packet, data)
 
 				stamp, data, error = self.readPacket(stream)
 
