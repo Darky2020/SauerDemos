@@ -7,6 +7,7 @@ import time
 import enet
 import io
 import os
+import re
 
 SERVER_PING_INTERVAL = 2
 DEMO_SIZE_LOWER_BOUND = 280 # kB
@@ -172,15 +173,40 @@ class DemosClient(object):
 			for i in range(num):
 				text = getstr(data)
 				print(text)
-				split = text.split(": ")[1].split(", ")
-				mode, mapname, size = split[0], split[1], split[2]
 
-				if "kB" in size:
-					if float(size[:-2]) < DEMO_SIZE_LOWER_BOUND:
+				mode = ""
+				mapname = ""
+				size_type = ""
+				size = 0
+
+				if re.search(r"[A-z]{3} [A-z]{3} \d{1,2} \d{1,2}:\d{1,2}:\d{1,2} \d{4}: .{1,}, \w{1,}, \d{1,}.\d{1,}(kB|MB)", text):
+					# vanilla demolist text
+					split = text.split(": ")[1].split(", ")
+					mode, mapname, size, size_type = split[0], split[1], float(split[2][:-2]), split[2][-2:]
+					
+				elif re.search(r".{1,} on \w{1,}, ended \d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2} UTC \(\d{1,}.\d{1,} (kB|MB)\)", text):
+					# pixbraten demolist text
+					split = text.split(" on ")
+					mode = split[0]
+					split = split[1].split(", ")
+					mapname = split[0]
+					split = split[1].split("UTC (")
+					split = split[1][:-1].split(" ")
+					size = float(split[0])
+					size_type = split[1]
+
+				else:
+					print("Couldn't match demolist message")
+
+				if not mode or not mapname or not size_type or not size:
+					continue
+
+				if "kB" == size_type:
+					if size < DEMO_SIZE_LOWER_BOUND:
 						continue
 
-				if "MB" in size:
-					if float(size[:-2]) > DEMO_SIZE_UPPER_BOUND:
+				if "MB" == size_type:
+					if size > DEMO_SIZE_UPPER_BOUND:
 						continue
 
 				if DemolistCacheService.get_by_text(text):
