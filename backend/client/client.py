@@ -232,6 +232,7 @@ class DemosClient(object):
 			f.close()
 
 			self.getting_demo = False
+			self.connected_at = int(time.time()) # Reset the 1 minute disconnect timer
 
 		if packet_type == N_MAPCHANGE:
 			print(f"[{getcurtime()}] N_MAPCHANGE")
