@@ -122,8 +122,8 @@ def match_demos():
                     continue
 
                 tmp_player = {
-                    "name": player["name"],
-                    "team": player["team"],
+                    "name": player["name"].replace("'", "«").replace("\\", "»"), # Replace with arbitrary non sauer characters to avoid weird stuff when converting to string
+                    "team": player["team"].replace("'", "«").replace("\\", "»"),
                     "frags": player["frags"],
                     "deaths": player["deaths"]
                 }

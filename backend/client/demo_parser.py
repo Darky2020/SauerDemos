@@ -349,8 +349,8 @@ class DemoParser(object):
 					deaths = self.deaths[player]
 
 				tmp_player = {
-					"name": self.players[player]["name"],
-					"team": self.players[player]["team"],
+					"name": self.players[player]["name"].replace("'", "«").replace("\\", "»"), # Replace with arbitrary non sauer characters to avoid weird stuff when converting to string
+					"team": self.players[player]["team"].replace("'", "«").replace("\\", "»"),
 					"frags": frags,
 					"deaths": deaths
 				}
