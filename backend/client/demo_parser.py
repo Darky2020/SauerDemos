@@ -296,6 +296,8 @@ class DemoParser(object):
 			cn = getint(data)
 			if not self.intermission:
 				self.players.pop(cn)
+				self.deaths[cn] = 0
+				self.frags[cn] = 0
 
 		elif packet == N_TIMEUP:
 			seconds = getint(data)
