@@ -179,7 +179,7 @@ class DemosClient(object):
 				size_type = ""
 				size = 0
 
-				if re.search(r"[A-z]{3} [A-z]{3} \d{1,2} \d{1,2}:\d{1,2}:\d{1,2} \d{4}: .{1,}, \w{1,}, \d{1,}.\d{1,}(kB|MB)", text):
+				if re.search(r"[A-z]{3} [A-z]{3}\s{1,2}\d{1,2} \d{1,2}:\d{1,2}:\d{1,2} \d{4}: .{1,}, \w{1,}, \d{1,}.\d{1,}(kB|MB)", text):
 					# vanilla demolist text
 					split = text.split(": ")[1].split(", ")
 					mode, mapname, size, size_type = split[0], split[1], float(split[2][:-2]), split[2][-2:]
