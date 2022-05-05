@@ -194,7 +194,11 @@ class DemosClient(object):
 					split = split[1][:-1].split(" ")
 					size = float(split[0])
 					size_type = split[1]
-
+				elif re.search(r"\d{1,4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}: .{1,}, \w{1,}, \d{1,}.\d{1,}(kB|MB)", text):
+					# -Open 2021#1-
+					split = text.split(": ")
+					split = split[1].split(", ")
+					mode, mapname, size, size_type = split[0], split[1], float(split[2][:-2]), split[2][-2:]
 				else:
 					print("Couldn't match demolist message")
 
