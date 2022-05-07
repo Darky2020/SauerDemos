@@ -239,12 +239,14 @@ class DemosClient(object):
 			self.connected_at = int(time.time()) # Reset the 1 minute disconnect timer
 
 		if packet_type == N_MAPCHANGE:
+			print(f"[{getcurtime()}] Queue: {self.queue}")
 			print(f"[{getcurtime()}] N_MAPCHANGE")
 			# Hopefully this works
 			for i, _ in enumerate(self.queue):
 				self.queue[i] -= 1
 
 			self.queue = list(filter(self.filter_index, self.queue))
+			print(f"[{getcurtime()}] Queue: {self.queue}")
 
 	def poll_demos(self):
 		if self.getting_demo:
@@ -256,6 +258,7 @@ class DemosClient(object):
 		if not self.received_demo_list:
 			return
 
+		print(f"[{getcurtime()}] N_GETDEMO {self.queue[0]}")
 		self.sendpacket(1, N_GETDEMO, [self.queue[0], 1])
 
 		self.queue.pop(0)
