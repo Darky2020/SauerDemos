@@ -10,7 +10,7 @@ import os
 import re
 
 SERVER_PING_INTERVAL = 2
-DEMO_SIZE_LOWER_BOUND = 280 # kB
+DEMO_SIZE_LOWER_BOUND = 230 # kB
 DEMO_SIZE_UPPER_BOUND = 10 # MB
 
 class DemosClient(object):
