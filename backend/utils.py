@@ -84,14 +84,15 @@ def sauer2unicode(arg):
 	return result
 
 def getuint(stream):
-	# Should work for values up to 268435456
 	n = int.from_bytes(stream.read(1), byteorder='little')
-	if n == (1<<7):
+	if n & (1<<7):
 		n += ((int.from_bytes(stream.read(1), byteorder='little')) << 7) - (1<<7)
-		if n == (1<<14):
+		if n & (1<<14):
 			n += ((int.from_bytes(stream.read(1), byteorder='little')) << 14) - (1<<14)
-		if n == (1<<21):
+		if n & (1<<21):
 			n += ((int.from_bytes(stream.read(1), byteorder='little')) << 21) - (1<<21)
+		if n & (1<<28):
+			n |= 4026531840
 	return n
 
 def getint(stream):
