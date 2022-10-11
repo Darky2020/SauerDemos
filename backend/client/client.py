@@ -180,30 +180,30 @@ class DemosClient(object):
 				size = 0
 
 				if re.search(r"[A-z]{3} [A-z]{3}\s{1,2}\d{1,2} \d{1,2}:\d{1,2}:\d{1,2} \d{4}: .{1,}, [\w-]{1,}, \d{1,}.\d{1,}(kB|MB)", text):
-                    # vanilla demolist text
-                    # Example: Mon Oct  3 15:21:25 2022: ffa, dust2, 72.28kB
-                    split = text.split(": ")[1].split(", ")
-                    mode, mapname, size, size_type = split[0], split[1], float(split[2][:-2]), split[2][-2:]
-                    
-                elif re.search(r".{1,} on [\w-]{1,}, ended \d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2} UTC \(\d{1,}.\d{1,} (kB|MB)\)", text):
-                    # pixbraten demolist text
-                    # Example: instagib on mbt2, ended 2022-10-11 20:46:18 UTC (423.40 kB)
-                    split = text.split(" on ")
-                    mode = split[0]
-                    split = split[1].split(", ")
-                    mapname = split[0]
-                    split = split[1].split("UTC (")
-                    split = split[1][:-1].split(" ")
-                    size = float(split[0])
-                    size_type = split[1]
-                elif re.search(r"\d{1,4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}: .{1,}, [\w-]{1,}, \d{1,}.\d{1,}(kB|MB)", text):
-                    # -Open 2021#1-
-                    # Example: 2022-10-11 22:45:28: instagib, ot, 316.88kB
-                    split = text.split(": ")
-                    split = split[1].split(", ")
-                    mode, mapname, size, size_type = split[0], split[1], float(split[2][:-2]), split[2][-2:]
-                else:
-                    print("Couldn't match demolist message")
+					# vanilla demolist text
+					# Example: Mon Oct  3 15:21:25 2022: ffa, dust2, 72.28kB
+					split = text.split(": ")[1].split(", ")
+					mode, mapname, size, size_type = split[0], split[1], float(split[2][:-2]), split[2][-2:]
+					
+				elif re.search(r".{1,} on [\w-]{1,}, ended \d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2} UTC \(\d{1,}.\d{1,} (kB|MB)\)", text):
+					# pixbraten demolist text
+					# Example: instagib on mbt2, ended 2022-10-11 20:46:18 UTC (423.40 kB)
+					split = text.split(" on ")
+					mode = split[0]
+					split = split[1].split(", ")
+					mapname = split[0]
+					split = split[1].split("UTC (")
+					split = split[1][:-1].split(" ")
+					size = float(split[0])
+					size_type = split[1]
+				elif re.search(r"\d{1,4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}: .{1,}, [\w-]{1,}, \d{1,}.\d{1,}(kB|MB)", text):
+					# -Open 2021#1-
+					# Example: 2022-10-11 22:45:28: instagib, ot, 316.88kB
+					split = text.split(": ")
+					split = split[1].split(", ")
+					mode, mapname, size, size_type = split[0], split[1], float(split[2][:-2]), split[2][-2:]
+				else:
+					print("Couldn't match demolist message")
 
 				if not mode or not mapname or not size_type or not size:
 					continue
