@@ -52,7 +52,7 @@ def CanGetDemoFromServer(ip="", port=0):
 	mode = getint(data)
 	timeleft = getint(data)
 	maxclients = getint(data)
-	mastermode = getuint(data)
+	mastermode = getint(data)
 
 	if PROTOCOL != protocol:
 		return 1

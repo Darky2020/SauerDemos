@@ -144,7 +144,7 @@ gamemodes = {
     22: "effic_collect"
 }
 
-MM_AUTH = 255
+MM_AUTH = -1
 MM_OPEN = 0
 MM_VETO = 1
 MM_LOCKED = 2
